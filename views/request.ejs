@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MS SQL Writeback</title>
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://extensions.tableauusercontent.com/resources/tableau.extensions.1.latest.min.js"></script>
+    <script src="/request.js" defer></script>
+  </head>
+  <body>
+    <div class="container" style="margin: 30px;">
+      
+      <h3>Maintenance Request</h3>
+      
+      <div class="row">
+        <div class="col">
+          <b>Requested:</b> <%= request.Request_Time.toLocaleString() %>
+        </div>
+        <div class="col-auto">
+          <%= request.Property_Name %> | Unit <%= request.Unit %>
+        </div>
+      </div>
+      
+      <br />
+      
+      <p><b>Area:</b> <%= request.Area %></p>
+      
+      <p><b>Description:</b> <%= request.Description %></p>
+      
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="assignedTo">Assigned to:</label>
+            <select class="form-control" id="tech" name="tech">
+              <option value="">--Not assigned--</option>
+              <%- techs.map(tech =>
+              `<option value="${tech.Technician_ID}" ${request.Technician_ID === tech.Technician_ID ? 'selected' : ''}>${tech.Technician_Name}</option>`) %>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="status">Status:</label>
+            <select class="form-control" id="status" name="status">
+              <% ["Requested", "In Progress", "Closed"].forEach(status => { %>
+              <%- `<option value="${status}" ${request.Status === status ? 'selected': ''}>${status}</option>` %>
+              <% }) %>
+            </select>
+          </div>          
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="comments">Comments:</label>
+            <textarea class="form-control" id="comments" name="comments" rows="3"><%= request.Technician_Comments %></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row justify-content-end">
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary" onclick="updateRequest(<%= request.Request_ID %>)">Update</button>
+        </div>
+      </div>
+      
+    </div>
+  </body>
+</html>
