@@ -22,5 +22,7 @@
     "node",
     "glitch",
     "express"
-  ]
+  ],
+  "devDependencies": {},
+  "author": ""
 }
